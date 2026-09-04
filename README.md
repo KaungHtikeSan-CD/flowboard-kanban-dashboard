@@ -1,16 +1,19 @@
-# FlowBoard — Kanban Board with Dashboard
+# FlowBoard
 
-FlowBoard is a two-page React web application for planning and tracking team work. It provides a three-column Kanban board and a live dashboard, with all information stored in the browser using Local Storage—no backend is used.
+FlowBoard is a small Kanban board made with React. Our group made it to help a team keep track of tasks in three simple stages: **To Do**, **Doing**, and **Done**.
 
-## Features
+The project also has a dashboard page. It shows how many tasks are in each stage, how tasks are divided by category, and whether completed tasks were early, on time, or late.
 
-- Create, edit, and delete tasks
-- Move tasks between **TO DO**, **DOING**, and **DONE** using drag-and-drop or the card status selector
-- Automatically records the completion date when a task moves to DONE
-- Assign a provided team member and category to every task
-- Add categories that remain available after refreshing the page
-- Dashboard with summary cards, a task-status doughnut chart, category bar chart, and early/on-time/late completion performance chart
-- Responsive layout for desktop and mobile
+We used Local Storage, so the tasks and categories are still there after refreshing the page. There is no backend or database.
+
+## What you can do
+
+- Add a task with a title, description, category, dates, and responsible person
+- Edit or delete a task
+- Move a task between To Do, Doing, and Done by dragging it or choosing a new status
+- Add a new category when creating or editing a task
+- See the completion date when a task is moved to Done
+- Check the dashboard for task totals, overdue tasks, and charts
 
 ## Screenshots
 
@@ -18,66 +21,44 @@ FlowBoard is a two-page React web application for planning and tracking team wor
 | --- | --- |
 | ![Kanban board screenshot](docs/screenshots/kanban-board.png) | ![Dashboard screenshot](docs/screenshots/dashboard.png) |
 
-## Team members
+## Group members
 
 - Kaung Htike San
 - Phyo Min Khaing
 - Oak Soe Khant
 
-## Run locally
+## How to run the project
 
-1. Install dependencies: `npm install`
-2. Start the app: `npm run dev`
-3. Open the local address displayed by Vite.
+1. Download or clone this repository.
+2. Open the project folder in a terminal.
+3. Install the packages:
 
-To create a production build, run `npm run build`.
+   ```bash
+   npm install
+   ```
+
+4. Start the project:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open the local link shown in the terminal.
+
+To make a production version, run:
+
+```bash
+npm run build
+```
 
 ## GitHub Pages deployment
 
-1. Push this folder as its own GitHub repository.
-2. In the repository, go to **Settings → Pages** and select **GitHub Actions** as the source.
-3. Add the workflow below at `.github/workflows/deploy.yml`, commit, and push.
+The project includes a GitHub Actions workflow for GitHub Pages. After it is pushed, open the repository settings, go to **Pages**, and choose **GitHub Actions** as the source. GitHub will build and publish the project automatically whenever `main` is updated.
 
-```yml
-name: Deploy to GitHub Pages
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: true
-jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm install
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
+## How we shared the work
 
-The Vite configuration uses a relative asset path, so it works from a GitHub Pages project URL.
+We used separate branches so each member could make and push their own changes before merging them into `main`.
 
-## Suggested three-person contribution plan
-
-1. **Member 1:** board UI, task card, and task movement.
-2. **Member 2:** task form, category management, and Local Storage.
-3. **Member 3:** dashboard, README, screenshots, and deployment.
-
-Each person should use a separate branch, make an individual commit, push their branch, and open a pull request into `main`. This produces clear individual contribution history while keeping the final branch stable.
+- Board layout and task movement
+- Task form, categories, and Local Storage
+- Dashboard, README, screenshots, and deployment
