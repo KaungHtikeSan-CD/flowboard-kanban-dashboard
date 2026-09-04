@@ -7,17 +7,42 @@ export default function TaskModal({ task, categories, onClose, onSave, onAddCate
   const [form, setForm] = useState(emptyTask)
   const [newCategory, setNewCategory] = useState('')
   const [showCategory, setShowCategory] = useState(false)
+  const [error, setError] = useState('')
 
-  useEffect(() => setForm(task ? { ...task } : { ...emptyTask, category: categories[0] || '', personId: teamMembers[0]?.id || '' }), [task, categories])
-  const update = (field, value) => setForm((current) => ({ ...current, [field]: value }))
+  useEffect(() => {
+    setForm(task ? { ...task } : { ...emptyTask, category: categories[0] || '', personId: teamMembers[0]?.id || '' })
+    setError('')
+  }, [task, categories])
+  const update = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }))
+    setError('')
+  }
   const submit = (event) => {
     event.preventDefault()
-    if (!form.title.trim() || !form.category || !form.startDate || !form.dueDate || !form.personId) return
+    if (!form.title.trim() || !form.category || !form.startDate || !form.dueDate || !form.personId) {
+      setError('Please complete all required fields before saving the task.')
+      return
+    }
+    if (form.dueDate < form.startDate) {
+      setError('The due date cannot be earlier than the start date.')
+      return
+    }
+    if (form.status === 'done' && !form.completeDate) {
+      setError('Please select the date when this task was completed.')
+      return
+    }
     onSave({ ...form, title: form.title.trim(), description: form.description.trim() })
   }
   const addCategory = () => {
     const name = newCategory.trim()
-    if (!name) return
+    if (!name) {
+      setError('Enter a category name first.')
+      return
+    }
+    if (categories.some((category) => category.toLowerCase() === name.toLowerCase())) {
+      setError('This category already exists. Choose it from the list instead.')
+      return
+    }
     onAddCategory(name)
     update('category', name)
     setNewCategory('')
@@ -37,7 +62,8 @@ export default function TaskModal({ task, categories, onClose, onSave, onAddCate
           <label>Due date<input type="date" value={form.dueDate} onChange={(event) => update('dueDate', event.target.value)} required /></label>
         </div>
         {form.status === 'done' && <label>Complete date<input type="date" value={form.completeDate} onChange={(event) => update('completeDate', event.target.value)} required /></label>}
-        <div className="category-add">{showCategory ? <><input value={newCategory} onChange={(event) => setNewCategory(event.target.value)} placeholder="New category name" /><button type="button" className="text-button" onClick={addCategory}>Save category</button></> : <button type="button" className="text-button" onClick={() => setShowCategory(true)}>+ Add a new category</button>}</div>
+        <div className="category-add">{showCategory ? <><input value={newCategory} onChange={(event) => { setNewCategory(event.target.value); setError('') }} placeholder="New category name" /><button type="button" className="text-button" onClick={addCategory}>Save category</button></> : <button type="button" className="text-button" onClick={() => setShowCategory(true)}>+ Add a new category</button>}</div>
+        {error && <p className="form-error" role="alert">{error}</p>}
         <div className="modal-actions"><button type="button" className="secondary-button" onClick={onClose}>Cancel</button><button className="primary-button" type="submit">{task ? 'Save changes' : 'Create task'}</button></div>
       </form>
     </section>
