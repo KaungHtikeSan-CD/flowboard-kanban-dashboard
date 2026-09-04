@@ -23,9 +23,9 @@ We used Local Storage, so the tasks and categories are still there after refresh
 
 ## Group members
 
-- Kaung Htike San
-- Phyo Min Khaing
-- Oak Soe Khant
+- Kaung Htike San — 6715133
+- Phyo Min Khaing — 6715185
+- Oak Soe Khant — 6712128
 
 ## How to run the project
 
